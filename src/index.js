@@ -13,6 +13,7 @@ onPageLoad();
 
 function onPageLoad() {
   refs.loadMoreBtn.classList.add('hidden');
+  refs.loadMoreBtn.classList.remove('for-display');
 }
 
 refs.form.addEventListener('submit', onSubmit);
@@ -92,5 +93,6 @@ function onLoadMore(e) {
 
 function onStopMarkup() {
   refs.loadMoreBtn.classList.add('hidden');
+  refs.loadMoreBtn.classList.remove('for-display');
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
 }
