@@ -20,6 +20,8 @@ refs.form.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 function onSubmit(e) {
+  refs.loadMoreBtn.classList.add('hidden');
+  refs.loadMoreBtn.classList.remove('for-display');
   refs.gallery.innerHTML = '';
   e.preventDefault();
   const word = e.currentTarget.elements.searchQuery.value;
