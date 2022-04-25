@@ -1,7 +1,7 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
 
-const API_KEY = '26994975-a2fba7f6b2c37c671f7f959b7';
+import { onSearch } from './search';
 
 const refs = {
   form: document.querySelector('form#search-form'),
@@ -31,11 +31,6 @@ function onSubmit(e) {
       sessionStorage.setItem('page', `${Number(sessionStorage.getItem('page')) + 1}`);
     })
     .catch(console.log);
-}
-
-function onSearch(searchWord, page) {
-  const url = `https://pixabay.com/api/?key=26994975-a2fba7f6b2c37c671f7f959b7&q=${searchWord}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`;
-  return fetch(url).then(r => r.json());
 }
 
 function onMarkupMake(obj) {
@@ -98,32 +93,4 @@ function onLoadMore(e) {
 function onStopMarkup() {
   refs.loadMoreBtn.classList.add('hidden');
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-}
-
-// function makeSearch(askWord, page) {
-//   return fetch(
-//     `https://pixabay.com/api/?key=${API_KEY}&q=${askWord}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`,
-//   ).then(r => r.json());
-// }
-
-{
-  /* <a href="${el.largeImageURL}">
-  <div class="photo-card">
-    <img src="${el.webformatURL}" alt="${el.tags}" loading="lazy" />
-    <div class="info">
-      <p class="info-item">
-        <b>Likes</b> ${el.likes}
-      </p>
-      <p class="info-item">
-        <b>Views</b> ${el.views}
-      </p>
-      <p class="info-item">
-        <b>Comments</b> ${el.comments}
-      </p>
-      <p class="info-item">
-        <b>Downloads</b> ${el.downloads}
-      </p>
-    </div>
-  </div>
-</a>; */
 }
