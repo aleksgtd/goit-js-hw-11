@@ -1,3 +1,4 @@
+import Notiflix from 'notiflix';
 import { refs } from '../index';
 import { onBtnHide } from './on-btn-hide';
 
