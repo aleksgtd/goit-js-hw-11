@@ -1,7 +1,9 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
 
-import { onSearch } from './search';
+import { onSearch } from './js/search';
+import { onBtnHide } from './js/on-btn-hide';
+import { onMarkupMake } from './js/on-markup-make';
 
 const refs = {
   form: document.querySelector('form#search-form'),
@@ -9,22 +11,21 @@ const refs = {
   loadMoreBtn: document.querySelector('button.load-more'),
 };
 
-onPageLoad();
-
-function onPageLoad() {
-  refs.loadMoreBtn.classList.add('hidden');
-  refs.loadMoreBtn.classList.remove('for-display');
-}
+onBtnHide();
 
 refs.form.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 function onSubmit(e) {
-  refs.loadMoreBtn.classList.add('hidden');
-  refs.loadMoreBtn.classList.remove('for-display');
-  refs.gallery.innerHTML = '';
   e.preventDefault();
-  const word = e.currentTarget.elements.searchQuery.value;
+  const word = e.currentTarget.elements.searchQuery.value.trim();
+  if (!word) {
+    Notiflix.Notify.failure('No words in search query field. Please enter something.');
+    return;
+  }
+  onBtnHide();
+  refs.gallery.innerHTML = '';
+
   e.currentTarget.reset();
   sessionStorage.setItem('page', '1');
 
@@ -36,54 +37,6 @@ function onSubmit(e) {
     .catch(console.log);
 }
 
-function onMarkupMake(obj) {
-  refs.loadMoreBtn.classList.remove('hidden');
-  refs.loadMoreBtn.classList.add('for-display');
-  if (!obj.hits.length) {
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.',
-    );
-    return;
-  }
-
-  if (!refs.gallery.innerHTML) {
-    refs.gallery.innerHTML = '<ul class="list"></ul>';
-  }
-
-  const ul = document.querySelector('ul.list');
-
-  obj.hits.forEach(el => {
-    ul.insertAdjacentHTML('beforeend', onCardMarkupMade(el));
-  });
-
-  const pageLimit = parseInt(obj.totalHits / 40) + 1;
-  if (Number(sessionStorage.getItem('page')) === pageLimit) {
-    onStopMarkup();
-  }
-}
-
-function onCardMarkupMade(el) {
-  return `<li class="gallery-item">
-  <div class="photo-card">
-    <img src="${el.webformatURL}" alt="${el.tags}" loading="lazy" />
-    <div class="info">
-      <p class="info-item">
-        <b>Likes</b> ${el.likes}
-      </p>
-      <p class="info-item">
-        <b>Views</b> ${el.views}
-      </p>
-      <p class="info-item">
-        <b>Comments</b> ${el.comments}
-      </p>
-      <p class="info-item">
-        <b>Downloads</b> ${el.downloads}
-      </p>
-    </div>
-  </div>
-</li>`;
-}
-
 function onLoadMore(e) {
   onSearch(refs.form.elements.searchQuery.value, Number(sessionStorage.getItem('page')))
     .then(el => {
@@ -93,8 +46,4 @@ function onLoadMore(e) {
     .catch(console.log);
 }
 
-function onStopMarkup() {
-  refs.loadMoreBtn.classList.add('hidden');
-  refs.loadMoreBtn.classList.remove('for-display');
-  Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-}
+export { refs };
